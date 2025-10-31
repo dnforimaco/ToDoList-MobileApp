@@ -70,7 +70,7 @@ Expo Go-Simplified testing and deployment for React Native apps
 
 ### 👤 Developer
 
-Dirk Nash Forimaco
+Dirk Nash F. Orimaco
 
 📧 dirknashorimaco1@gmail.com
 
