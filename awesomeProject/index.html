@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goal Manager App</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .app-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // React Native components adapted for web
+        const MaterialIcons = {
+            name: (name) => name,
+            size: (size) => ({ fontSize: size }),
+            color: (color) => ({ color: color })
+        };
+
+        const View = ({ children, style = {}, ...props }) => {
+            const combinedStyle = {
+                display: 'flex',
+                flexDirection: style.flexDirection || 'column',
+                alignItems: style.alignItems || 'stretch',
+                justifyContent: style.justifyContent || 'flex-start',
+                paddingTop: style.paddingTop || 0,
+                paddingHorizontal: style.paddingHorizontal || 0,
+                paddingVertical: style.paddingVertical || 0,
+                marginBottom: style.marginBottom || 0,
+                backgroundColor: style.backgroundColor || 'transparent',
+                borderRadius: style.borderRadius || 0,
+                elevation: style.elevation || 0,
+                gap: style.gap || 0,
+                flex: style.flex || 'none',
+                ...style
+            };
+            return React.createElement('div', { style: combinedStyle, ...props }, children);
+        };
+
+        const Text = ({ children, style = {}, ...props }) => {
+            const combinedStyle = {
+                fontSize: style.fontSize || 14,
+                fontWeight: style.fontWeight || 'normal',
+                color: style.color || '#333',
+                marginBottom: style.marginBottom || 0,
+                textAlign: style.textAlign || 'left',
+                ...style
+            };
+            return React.createElement('div', { style: combinedStyle, ...props }, children);
+        };
+
+        const Button = ({ title, onPress, style = {} }) => {
+            const combinedStyle = {
+                backgroundColor: '#007AFF',
+                color: 'white',
+                border: 'none',
+                padding: '10px 20px',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                fontSize: '16px',
+                margin: '5px',
+                ...style
+            };
+            return React.createElement('button', {
+                style: combinedStyle,
+                onClick: onPress
+            }, title);
+        };
+
+        const Modal = ({ visible, children, transparent = false }) => {
+            if (!visible) return null;
+
+            const modalStyle = {
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: transparent ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.8)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 1000
+            };
+
+            return React.createElement('div', { style: modalStyle }, children);
+        };
+
+        const StyleSheet = {
+            create: (styles) => styles
+        };
+
+        // Import components (these would need to be adapted for web)
+        const FlatListContainer = ({ goals, onDeleteGoal }) => {
+            return React.createElement('div', { style: { flex: 1, padding: '10px' } },
+                React.createElement('h3', {}, 'Goals (FlatList)'),
+                goals.map(goal =>
+                    React.createElement('div', {
+                        key: goal.id,
+                        style: {
+                            padding: '10px',
+                            margin: '5px 0',
+                            backgroundColor: '#f0f0f0',
+                            borderRadius: '5px',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center'
+                        }
+                    },
+                        React.createElement('span', {}, goal.text),
+                        React.createElement('button', {
+                            onClick: () => onDeleteGoal(goal.id),
+                            style: { backgroundColor: '#ff4444', color: 'white', border: 'none', borderRadius: '3px', padding: '5px 10px' }
+                        }, 'Delete')
+                    )
+                )
+            );
+        };
+
+        const ScrollViewContainer = ({ goals, onDeleteGoal }) => {
+            return React.createElement('div', { style: { flex: 1, padding: '10px' } },
+                React.createElement('h3', {}, 'Goals (ScrollView)'),
+                React.createElement('div', { style: { maxHeight: '300px', overflowY: 'auto' } },
+                    goals.map(goal =>
+                        React.createElement('div', {
+                            key: goal.id,
+                            style: {
+                                padding: '10px',
+                                margin: '5px 0',
+                                backgroundColor: '#e8f4f8',
+                                borderRadius: '5px',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                            }
+                        },
+                            React.createElement('span', {}, goal.text),
+                            React.createElement('button', {
+                                onClick: () => onDeleteGoal(goal.id),
+                                style: { backgroundColor: '#ff4444', color: 'white', border: 'none', borderRadius: '3px', padding: '5px 10px' }
+                            }, 'Delete')
+                            )
+                    )
+                )
+            );
+        };
+
+        const GoalInput = ({ onAddGoal }) => {
+            const [text, setText] = React.useState('');
+
+            return React.createElement('div', { style: { marginBottom: '20px', padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '8px' } },
+                React.createElement('input', {
+                    type: 'text',
+                    value: text,
+                    onChange: (e) => setText(e.target.value),
+                    placeholder: 'Enter your goal...',
+                    style: {
+                        width: '100%',
+                        padding: '10px',
+                        border: '1px solid #ddd',
+                        borderRadius: '5px',
+                        fontSize: '16px',
+                        marginBottom: '10px'
+                    }
+                }),
+                React.createElement('button', {
+                    onClick: () => {
+                        if (text.trim()) {
+                            onAddGoal(text);
+                            setText('');
+                        }
+                    },
+                    style: {
+                        backgroundColor: '#28a745',
+                        color: 'white',
+                        border: 'none',
+                        padding: '10px 20px',
+                        borderRadius: '5px',
+                        fontSize: '16px',
+                        cursor: 'pointer'
+                    }
+                }, 'Add Goal')
+            );
+        };
+
+        // User Icon Component
+        const UserIcon = ({ onClick }) => {
+            return React.createElement('button', {
+                onClick: onClick,
+                style: {
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontSize: '28px',
+                    padding: '8px',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '50px',
+                    height: '50px',
+                    transition: 'all 0.2s ease'
+                },
+                onMouseEnter: (e) => {
+                    e.target.style.backgroundColor = '#f0f0f0';
+                    e.target.style.transform = 'scale(1.1)';
+                },
+                onMouseLeave: (e) => {
+                    e.target.style.backgroundColor = 'transparent';
+                    e.target.style.transform = 'scale(1)';
+                }
+            }, '👤');
+        };
+
+        // Main App Component (adapted from App.js)
+        const App = () => {
+            const [courseGoals, setCourseGoals] = React.useState([]);
+            const [modalVisible, setModalVisible] = React.useState(false);
+            const [animationType, setAnimationType] = React.useState('slide');
+            const [modalTransparent, setModalTransparent] = React.useState(true);
+            const [welcomeModalVisible, setWelcomeModalVisible] = React.useState(false);
+
+            const addGoalHandler = (enteredGoalText) => {
+                if (enteredGoalText.trim().length === 0) {
+                    return;
+                }
+                setCourseGoals((currentGoals) => [
+                    ...currentGoals,
+                    {
+                        text: enteredGoalText,
+                        key: Math.random().toString(),
+                        id: Date.now().toString() + Math.random().toString()
+                    }
+                ]);
+            };
+
+            const deleteGoalHandler = (goalId) => {
+                setCourseGoals((currentGoals) => {
+                    return currentGoals.filter((goal) => goal.id !== goalId);
+                });
+            };
+
+            const styles = {
+                appContainer: {
+                    flex: 1,
+                    paddingTop: 50,
+                    paddingHorizontal: 16,
+                    backgroundColor: '#f0f0f0',
+                },
+                navBar: {
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginBottom: 20,
+                    paddingHorizontal: 8,
+                },
+                navBarLeft: {
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    flex: 1,
+                },
+                navBarRight: {
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                },
+                appTitle: {
+                    fontSize: 24,
+                    fontWeight: 'bold',
+                    color: '#333',
+                    flex: 1,
+                },
+                containersWrapper: {
+                    flex: 1,
+                    flexDirection: 'row',
+                    gap: 10,
+                },
+                modalOverlay: {
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: 'rgba(0,0,0,0.5)',
+                },
+                modalContent: {
+                    backgroundColor: '#fff',
+                    padding: 20,
+                    borderRadius: 10,
+                    width: '80%',
+                    maxWidth: 400,
+                },
+                modalTitle: {
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    marginBottom: 10,
+                    textAlign: 'center',
+                },
+                modalSubtitle: {
+                    fontSize: 16,
+                    marginBottom: 5,
+                    textAlign: 'center',
+                },
+                buttonContainer: {
+                    marginTop: 20,
+                },
+                animationButtons: {
+                    flexDirection: 'row',
+                    justifyContent: 'space-around',
+                    marginTop: 10,
+                },
+                welcomeModalContent: {
+                    backgroundColor: '#fff',
+                    padding: 30,
+                    borderRadius: 15,
+                    width: '90%',
+                    maxWidth: 450,
+                    textAlign: 'center',
+                    borderWidth: 2,
+                    borderColor: '#e3f2fd',
+                },
+                welcomeModalTitle: {
+                    fontSize: 28,
+                    fontWeight: 'bold',
+                    marginBottom: 15,
+                    textAlign: 'center',
+                    color: '#1565c0',
+                },
+                welcomeModalSubtitle: {
+                    fontSize: 20,
+                    marginBottom: 15,
+                    textAlign: 'center',
+                    color: '#424242',
+                    fontWeight: '600',
+                },
+                welcomeModalText: {
+                    fontSize: 16,
+                    marginBottom: 25,
+                    textAlign: 'center',
+                    color: '#666',
+                    lineHeight: 1.5,
+                },
+                welcomeButtonContainer: {
+                    marginTop: 20,
+                    justifyContent: 'center',
+                },
+            };
+
+            return React.createElement('div', { className: 'app-container' },
+                React.createElement(Modal, {
+                    visible: modalVisible,
+                    transparent: modalTransparent
+                },
+                    React.createElement(View, { style: styles.modalOverlay },
+                        React.createElement(View, { style: styles.modalContent },
+                            React.createElement(Text, { style: styles.modalTitle }, 'Modal Content'),
+                            React.createElement(Text, { style: styles.modalSubtitle }, 'Animation: ' + animationType),
+                            React.createElement(Text, { style: styles.modalSubtitle }, 'Transparent: ' + (modalTransparent ? 'Yes' : 'No')),
+
+                            React.createElement(View, { style: styles.buttonContainer },
+                                React.createElement(Button, { title: 'Close Modal', onPress: () => setModalVisible(false) }),
+                                React.createElement(View, { style: { marginTop: 10 } },
+                                    React.createElement(Text, {}, 'Test Different Animations:'),
+                                    React.createElement(View, { style: styles.animationButtons },
+                                        React.createElement(Button, { title: 'Slide', onPress: () => setAnimationType('slide') }),
+                                        React.createElement(Button, { title: 'Fade', onPress: () => setAnimationType('fade') }),
+                                        React.createElement(Button, { title: 'None', onPress: () => setAnimationType('none') })
+                                    )
+                                ),
+                                React.createElement(View, { style: { marginTop: 10 } },
+                                    React.createElement(Button, {
+                                        title: modalTransparent ? "Remove Transparency" : "Add Transparency",
+                                        onPress: () => setModalTransparent(!modalTransparent)
+                                    })
+                                )
+                            )
+                        )
+                    )
+                ),
+
+                // Welcome Modal
+                React.createElement(Modal, {
+                    visible: welcomeModalVisible,
+                    transparent: true
+                },
+                    React.createElement(View, { style: styles.modalOverlay },
+                        React.createElement(View, { style: styles.welcomeModalContent },
+                            React.createElement(Text, { style: styles.welcomeModalTitle }, '🎉 Welcome!'),
+                            React.createElement(Text, { style: styles.welcomeModalSubtitle }, 'Welcome to the Goal Manager Application!'),
+                            React.createElement(Text, { style: styles.welcomeModalText }, 'Start by adding your goals using the input field below. You can manage your goals, test modal functionality, and explore all the features of this demo application.'),
+                            React.createElement(View, { style: styles.welcomeButtonContainer },
+                                React.createElement(Button, {
+                                    title: 'Get Started!',
+                                    onPress: () => setWelcomeModalVisible(false)
+                                })
+                            )
+                        )
+                    )
+                ),
+
+                React.createElement(View, { style: styles.navBar },
+                    React.createElement(View, { style: styles.navBarLeft },
+                        React.createElement(UserIcon, {
+                            onClick: () => setWelcomeModalVisible(true)
+                        }),
+                        React.createElement(Text, { style: styles.appTitle }, 'Goal Manager - Component Demo')
+                    ),
+                    React.createElement(View, { style: styles.navBarRight },
+                        React.createElement(Text, { style: { marginRight: 12 } }, '⚙️'),
+                        React.createElement(Button, { title: 'Show Modal', onPress: () => setModalVisible(true) })
+                    )
+                ),
+
+                React.createElement(GoalInput, { onAddGoal: addGoalHandler }),
+
+                React.createElement(View, { style: styles.containersWrapper },
+                    React.createElement(ScrollViewContainer, {
+                        goals: courseGoals,
+                        onDeleteGoal: deleteGoalHandler
+                    }),
+                    React.createElement(FlatListContainer, {
+                        goals: courseGoals,
+                        onDeleteGoal: deleteGoalHandler
+                    })
+                )
+            );
+        };
+
+        // Render the app
+        ReactDOM.render(React.createElement(App), document.getElementById('root'));
+    </script>
+</body>
+</html>
