@@ -15,18 +15,22 @@ These screenshots demonstrate the actual working version of the app.
 ### 🚀 Getting Started
 
 1️⃣ Clone the Repository
+```bash
+   git clone https://github.com/<your-username>/ToDoList-MobileApp.git
 
-_git clone https://github.com/<your-username>/ToDoList-MobileApp.git
-
-cd ToDoList-MobileApp/awesomeProject_
+   cd ToDoList-MobileApp/awesomeProject
+   ```
 
 2️⃣ Install Dependencies
+```bash
+   npm install
+   ```
 
-_npm install_
 
 3️⃣ Run the App
-
-_npx expo start_
+```bash
+   npx expo start
+   ```
 
 Then, scan the QR code with the Expo Go app on your mobile device
 
