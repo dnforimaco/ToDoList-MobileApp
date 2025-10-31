@@ -1,5 +1,6 @@
-# ToDoList-MobileApp
+# 📝ToDoList-MobileApp
 A simple and interactive mobile application designed to help users organize and keep track of their goals.
+
 Built using Node.js, React Native, and Expo Go, this app offers a smooth, modern, and intuitive goal management experience.
 
 📸 App Preview
@@ -10,44 +11,62 @@ Built using Node.js, React Native, and Expo Go, this app offers a smooth, modern
 These screenshots demonstrate the actual working version of the app.
 
 🚀 Getting Started
+
 1️⃣ Clone the Repository
+
 _git clone https://github.com/<your-username>/ToDoList-MobileApp.git
+
 cd ToDoList-MobileApp/awesomeProject_
 
 2️⃣ Install Dependencies
+
 _npm install_
 
 3️⃣ Run the App
+
 _npx expo start_
 
 Then, scan the QR code with the Expo Go app on your mobile device
+
 (Google Play | App Store).
 
 📦 Build and Deployment
 
 If you’d like to generate your own .apk or .aab file:
+
 📘 Follow Expo’s official build guide
 
 💬 Or simply contact the owner to request the executable version.
+
 Available formats: APK and AAB
 
 🧩 Features
 
 ✅ Add, view, and delete personal goals
+
 ✅ Animated modal interface
+
 ✅ Warning and confirmation dialogs for safe goal management
+
 ✅ “Clear All” feature with confirmation
+
 ✅ Clean, minimal, and responsive UI
 
 🛠️ Tech Stack
 
 Technology-Description
+
 React Native-Cross-platform mobile development framework
+
 Node.js-Runtime environment for managing dependencies
+
 Expo Go-Simplified testing and deployment for React Native apps
+
 
 👤 Developer
 
 Dirk Nash Forimaco
+
 📧 dirknashorimaco1@gmail.com
+
 For collaborations or executable builds, feel free to reach out.
