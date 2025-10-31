@@ -1,50 +1,36 @@
-# Welcome to your Expo app 👋
+📝 To-Do List App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A simple mobile application built with React Native (Expo) that allows users to list and manage their personal goals.
 
-## Get started
+🚀 How to Run the App
 
-1. Install dependencies
+Install Dependencies
 
-   ```bash
-   npm install
-   ```
+npm install
 
-2. Start the app
 
-   ```bash
-   npx expo start
-   ```
+Start the Expo Development Server
 
-In the output, you'll find options to open the app in a
+npx expo start
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+Open the App
 
-## Get a fresh project
+Scan the QR code displayed in the terminal using the Expo Go app on your mobile device (available on Google Play and App Store).
 
-When you're ready, run:
+The project will automatically load on your phone.
 
-```bash
-npm run reset-project
-```
+📦 Building the App
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+If you want to generate an .apk or .aab file for Android installation, refer to the official Expo build tutorials
+ for step-by-step guidance.
 
-## Learn more
+📁 Project Structure
 
-To learn more about developing your project with Expo, look at the following resources:
+- App.js – Main entry point of the application
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- components/ – Contains reusable UI components like GoalInput, GoalItem, and GoalList
 
-## Join the community
+- assets/ – Stores images and icons
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- constants/, hooks/, and scripts/ – Support files for logic and configuration
